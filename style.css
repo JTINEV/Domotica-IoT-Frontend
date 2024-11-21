@@ -18,3 +18,36 @@ body {
     max-width: 500px;
     text-align: center;
 }
+h1 {
+    color: #333;
+}
+
+.sensor {
+    background-color: #e9e9e9;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+}
+
+#sensorTemperatura {
+    background-color: #fdd;
+}
+
+#sensorHumedad {
+    background-color: #dfd;
+}
+
+#sensorMovimiento {
+    background-color: #ddf;
+}
+
+.table-container {
+    height: 250px; /* Altura fija para las tablas */
+    overflow-y: auto; /* Habilita desplazamiento vertical */
+    margin-bottom: 20px;
+    max-width: 100%;
+    border: 1px solid #ddd;
+}
