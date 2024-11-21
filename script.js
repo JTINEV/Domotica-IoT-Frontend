@@ -61,3 +61,51 @@ client.on("message", function (topic, message) {
             console.warn("Topic desconocido: ", topic);
     }
 });
+// Función para reconectar al broker MQTT
+void reconnectMQTT() {
+    while (!client.connected()) {
+        Serial.print("Intentando conectar al broker MQTT...");
+        
+        // Intentamos conectar con usuario y contraseña
+        if (client.connect("ESP32_Client", mqtt_user, mqtt_pass)) {
+            Serial.println("Conectado al broker MQTT");
+        } else {
+            Serial.print("Falló, rc=");
+            Serial.print(client.state());
+            Serial.println(" Intentando nuevamente en 5 segundos...");
+            delay(5000);
+        }
+    }
+}
+
+void setup() {
+    Wire.begin();  // Pines I2C personalizados
+    Serial.begin(115200);
+    delay(100); // Retardo para permitir que el puerto serie se ajuste
+
+    // Conectar a WiFi
+    setupWiFi();
+
+    // Configurar el cliente MQTT
+    client.setServer(mqtt_server, 1883);
+
+    // Inicialización de la pantalla OLED
+    u8g2.begin();
+
+    // Verificar la dirección I2C del sensor SHT
+    Wire.beginTransmission(0x40);
+    if (Wire.endTransmission() == 0) {
+        Serial.println("Sensor SHT encontrado en la dirección 0x40");
+    } else {
+        Serial.println("Sensor SHT no encontrado en la dirección 0x40");
+    }
+
+    if (sht.init()) {
+        Serial.println("init(): Exitoso");
+    } else {
+        Serial.println("init(): Fallido");
+    }
+    sht.setAccuracy(SHTSensor::SHT_ACCURACY_MEDIUM);
+
+    pinMode(pirPin, INPUT); // Configurar el pin del sensor PIR como entrada
+}
